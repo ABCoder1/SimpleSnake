@@ -1,5 +1,7 @@
 #include <iostream>
 #include <conio.h>
+#include <cstdlib>
+#include <windows.h>
 using namespace std;
 
 bool gameOver;
@@ -33,21 +35,22 @@ void Draw() {
 				cout << "#";	//  Print the left wall
 			}
 			if (i == y && j == x) {
-				cout << "0";	// Instead of printing a empty space we print the head of the snake
+				cout << "O";	// Instead of printing a empty space we print the head of the snake
 			}
 			else if (i == fruitY && j == fruitX) {
 				cout << "F";	// Printing the fruit
 			}
 			else {
-				
-				bool print = false;
-				for (int k = 0; k < nTail; i++) {
-					
+
+                bool print = false;
+				for (int k = 0; k < nTail; k++) {
+
+
 					if (tailX[k] == j && tailY[k] == i) {
 						cout << "o";
 						print = true;
-					}							
-				} 
+					}
+				}
 					if (!print) {
 						cout << " ";	// The remaining interior is empty
 					}
@@ -90,7 +93,7 @@ void Input() {
 void Logic() {
 	int prevX = tailX[0];		// x coordinate of previous node being the tail
 	int prevY = tailY[0];		// y coordinate of previous node being the tail
-	int prev2X, prev2Y;
+ 	int prev2X, prev2Y;
 	// To move the tail
 	tailX[0] = x;
 	tailY[0] = y;
@@ -98,8 +101,10 @@ void Logic() {
 	for (int i = 1; i < nTail; i++) {		// Since when we input ,our one of the nodes(head) turns by itself and we have to control the remaining nodes as the tail
 		prev2X = tailX[i];
 		prev2Y = tailY[i];
+
 		tailX[i] = prevX;
 		tailY[i] = prevY;
+
 		prevX = prev2X;
 		prevY = prev2Y;
 	}
@@ -122,6 +127,14 @@ void Logic() {
 	if (x > width || x < 0 || y < 0 || y > height) {
 		gameOver = true;
 	}
+
+	for(int i=0; i < nTail; i++){
+
+        if(tailX[i] == x && tailY[i] == y){
+            gameOver = true;
+        }
+	}
+
 	if (x == fruitX && y == fruitY) {
 		score = score + 10;		// After eating the fruit it should be relocated somewhere
 		fruitX = rand() % width;
@@ -136,6 +149,6 @@ int main() {
 		Input();
 		Logic();
 	}
-	// Sleep(10) ; - Slows down the game a little bit
+	Sleep(10) ; // - Slows down the game a little bit
 	return 0;
 }
